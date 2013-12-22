@@ -1,5 +1,4 @@
-/*
-angular.module('TnG', ['ngRoute', 'firebase'])
+var app = angular.module('TnG', ['ngRoute'])
 
     .value('endpoint', 'https://talkngolf.firebaseio.com')
 
@@ -9,28 +8,17 @@ angular.module('TnG', ['ngRoute', 'firebase'])
 
     .config(function ($routeProvider) {
         $routeProvider
-            .when('/play/choose', {
+            .when('/choose', {
                 controller:'Chooser',
                 templateUrl:'app/views/chooser.angv'
             })
     })
 
     .controller('Chooser', function ($scope) {
-        $scope.title = "Chooser";
+        $scope.heading = "Choose";
+        $scope.subHeading = "Starting hole";
+        $scope.panes = {
+                "Practice": "/practice",
+                "Play": "/play/choose/clubset"
+            }
     });
-*/
-
-var app = angular.module('TnG', ['ngRoute']);
-
-app.controller('Chooser', function ($scope) {
-    $scope.heading = "Choose";
-    $scope.subHeading = "Starting hole";
-});
-
-app.config(function ($routeProvider) {
-    $routeProvider
-        .when('/', {
-            controller:'Chooser',
-            templateUrl:'app/views/chooser.angv'
-        })
-})
