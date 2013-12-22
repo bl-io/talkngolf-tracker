@@ -34,13 +34,6 @@ var app = angular.module('TnG', ['ngRoute'])
         this.continuePlaySetup = function (nextStep, dataToSave) {
             $location.path(nextStep);
         };
-
-        this.registerData = function (collection, saveToModel) {
-            $http({method: 'GET', url: endpoint + collection + '/.json'})
-                .success(function (data, status, headers, config) {
-                    saveToModel(data);
-                })
-        };
     })
 
     .controller('Round', function ($scope) {
@@ -66,9 +59,6 @@ var app = angular.module('TnG', ['ngRoute'])
 
         $scope.continuePlaySetup = function (clubData) {
             collection = baseCollection + "/" + clubData;
-            PlaySetup.registerData(collection, function(retrievedData) {
-                $scope.$emit('round-update');
-            });
         };
 
         $scope.heading = "Choose Club Set";
