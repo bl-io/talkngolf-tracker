@@ -36,11 +36,19 @@
         }
         .exit {
             font-size: 2em;
-
         }
+        .mView {
+            margin-top: 75px;
+        }
+        .mView .heading {
+            text-align: center;
+            letter-spacing: 0.1em;
+        }
+
+
     </style>
 </head>
-<body>
+<body data-ng-app="TnG">
 <nav class="nav navbar navbar-fixed-top">
     <div class="navbar-brand">
         <a class="logo">TnG</a>
@@ -49,10 +57,10 @@
         <a class="exit glyphicon glyphicon-remove-circle"></a>
     </div>
 </nav>
+<div class="mView" data-ng-view="">
 
+</div>
 
-<script type="text/javascript" src="lib/angular/1.2.6/angular.min.js"></script>
 <script type="text/javascript" src="lib/app-loader.js"></script>
-
 </body>
 </html>
