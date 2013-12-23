@@ -1,5 +1,6 @@
-<div class="dynamic-content btn-group btn-group-vertical btn-group-lg">
-    <a type="button" class="btn btn-default"
-       data-ng-repeat="(paneTitle, paneLink) in panes"
-       data-ng-click="continuePlaySetup(paneLink)" data-ng-bind="paneTitle"></a>
+<h2 data-ng-bind="heading" class="heading"></h2>
+<h3 data-ng-bind="subHeading" class="sub-heading"></h3>
+
+<div data-ng-repeat="(moodSwing,moodClass) in panes"
+     class="{{moodClass}}" data-ng-click="trackMood(moodSwing)">
 </div>
