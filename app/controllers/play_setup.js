@@ -1,19 +1,19 @@
 angular.module('TnG')
 
-.controller('Chooser', function ($scope, PlaySetup) {
-    var nextStep = "/play/choose/clubset";
-    $scope.heading = "Choose";
-    $scope.subHeading = "Starting hole";
-    $scope.panes = {
-        "Practice": "practice",
-        "Play": "play"
-    };
+    .controller('Chooser', function ($scope, PlaySetup) {
+        var nextStep = "/play/choose/clubset";
+        $scope.heading = "Choose";
+        $scope.subHeading = "Starting hole";
+        $scope.panes = {
+            "Practice": "practice",
+            "Play": "play"
+        };
 
-    $scope.continuePlaySetup = function (selectedMode) {
-        PlaySetup.selectedMode = selectedMode;
-        PlaySetup.continuePlaySetup(nextStep);
-    };
-})
+        $scope.continuePlaySetup = function (selectedMode) {
+            PlaySetup.selectedMode = selectedMode;
+            PlaySetup.continuePlaySetup(nextStep);
+        };
+    })
 
     .controller('Clubset', function ($scope, PlaySetup) {
         var baseCollection = collection = 'clubs';
@@ -51,7 +51,7 @@ angular.module('TnG')
     })
 
     .controller('CourseStart', function ($scope, PlaySetup) {
-        var nextStep = "/play/tracking";
+        var nextStep = "/play/track/";
 
         $scope.heading = "Choose";
         $scope.subHeading = "The Starting Hole";
@@ -63,6 +63,6 @@ angular.module('TnG')
 
         $scope.continuePlaySetup = function (selectedStartingHole) {
             PlaySetup.selectedStartingHole = selectedStartingHole;
-            PlaySetup.continuePlaySetup(nextStep);
+            PlaySetup.continuePlaySetup(nextStep + selectedStartingHole);
         };
     })
