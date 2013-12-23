@@ -1,0 +1,49 @@
+body {
+    background: #EEE;
+}
+.logo {
+    font-size: 2em;
+}
+nav {
+    background: black;
+    color: white;
+}
+nav a,
+nav a:hover,
+nav a:visited {
+    color: white;
+}
+nav a:hover {
+    text-decoration: none;
+    color: #EEE;
+}
+nav a:active {
+    color: royalblue;
+}
+.exit {
+    font-size: 2em;
+}
+.mView {
+    margin-top: 63px;
+    /*border: solid thin red;*/
+    text-align: center;
+}
+.mView .heading {
+    text-align: center;
+    letter-spacing: 0.1em;
+    /*background: lime;*/
+    padding: 15px 15px 0px;
+    margin: 0 0 0 0;
+}
+.mView .sub-heading {
+    font-size: 0.9em;
+    color: #777;
+    text-align: center;
+    /*background: orange;*/
+    padding: 5px;
+    margin: 0 0 0 0;
+}
+.mView .dynamic-content {
+    /*border: solid thin yellow;*/
+    width: 100%;
+}
