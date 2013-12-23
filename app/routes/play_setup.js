@@ -3,11 +3,6 @@ angular.module('TnG')
 .config(function ($routeProvider) {
     $routeProvider
 
-        .when('/', {
-            controller:'Chooser',
-            templateUrl:'app/views/chooser.angv'
-        })
-
         .when('/play/choose/clubset', {
             controller:'Clubset',
             templateUrl:'app/views/choose_clubset.angv'
