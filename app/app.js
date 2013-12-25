@@ -1,5 +1,4 @@
 var app = angular.module('TnG', ['ngRoute'])
-
     .config(function ($routeProvider) {
         $routeProvider
 
@@ -33,54 +32,50 @@ var app = angular.module('TnG', ['ngRoute'])
 
     })
 
-    .controller('TrackClub', function ($scope, PlaySetup, PlayTracking, $routeParams) {
-        var nextStep, currentHole, currentShot, myClubs;
+    .controller('TrackClub', function ($scope, $http, $location, PlaySetup, PlayTracking, $routeParams) {
+        var baseUrl, nextStep, hole, shot, clubSet, round;
 
-        $scope.heading = "Pick A Club";
-        currentHole = $routeParams.currentHole;
-        currentShot = $routeParams.currentShot;
-        myClubs = PlaySetup.selectedClubSet || {"driver": "driver"}
+        round = $routeParams;
+        baseUrl = $location.path() + "/";
 
-        $scope.subHeading = "Hole " + currentHole + " Shot " + currentShot;
-        $scope.panes = myClubs;
+        $scope.heading = "Track Club";
+        $scope.subHeading = "Hole " + round.currentHole + " Shot "+ round.currentShot;
+        $scope.panes = PlaySetup.selectedClubSet;
 
-        $scope.trackShot = function (clubUsed) {
-            PlayTracking.trackShot(currentHole, currentShot, clubUsed);
-            nextStep = "/play/track/"+currentHole+"/"+currentShot+"/"+clubUsed.code;
+        $scope.selectClub = function (selectedClub) {
+            selectedClub = selectedClub.code;
+            nextStep = baseUrl + selectedClub;
+
             PlayTracking.continue(nextStep);
         };
+
+//        PlayTracking.fetch('clubs', function (publicClubSets) {
+//            $scope.panes = publicClubSets;
+//            console.log(PlaySetup)
+//        })
     })
 
-    .controller('TrackMood', function ($scope, PlayTracking, $routeParams) {
-        var baseUrl = "/play/track",
-            nextStep, shotData;
+    .controller('TrackMood', function ($scope, PlayTracking, $location, $routeParams) {
+        var baseUrl, nextStep, round;
+
+        baseUrl = $location.path() + "/";
+        round = $routeParams;
+
         $scope.heading = "How did that feel?";
-        $scope.subHeading = "Track Your MoodSwing";
+        $scope.subHeading = "Hole " + round.currentHole + " > Shot "+ round.currentShot + " > " + round.selectedClub;
 
         $scope.panes = {
-            "4": "face face4",
-            "3": "face face3",
+            "1": "face face1",
             "2": "face face2",
-            "1": "face face1"
+            "3": "face face3",
+            "4": "face face4"
         };
 
-        $scope.trackMood = function (moodSwing) {
-            nextStep = baseUrl;
+        $scope.selectMood = function (selectedMood) {
+            selectedMood = selectedMood;
+            nextStep = baseUrl + selectedMood;
 
-            for(var page in $routeParams) {
-                nextStep += "/" + $routeParams[page] + "/" + moodSwing;;
-            }
-
-            shotData = {
-                "holeNumber": $routeParams.currentHole,
-                "shotNumber": $routeParams.currentShot,
-                "clubUsed": $routeParams.selectedClub
-            };
-
-            PlayTracking.trackMood(moodSwing);
-
-//            console.log(nextStep)
-//            PlayTracking.continue(nextStep);
+            PlayTracking.continue(nextStep);
         };
     })
 
@@ -96,22 +91,23 @@ var app = angular.module('TnG', ['ngRoute'])
             {
                 "listOrder": "2",
                 "label": "Edit",
-                "name": "edit"
+                "name": "editTracking"
             },
             {
-                "listOrder": "1",
+                "listOrder": "3",
                 "label": "Next Hole",
-                "name": "next_hole"
+                "name": "nextHole"
             },
             {
-                "listOrder": "1",
+                "listOrder": "4",
                 "label": "Continue",
-                "name": "continue"
+                "name": "nextShot"
             }
         ];
 
-//        $scope.continue = function (nextActionLink) {
-//            nextStep = "/";
-//
-//        };
+        $scope.selectNext = function (selectedNextAction) {
+            if(PlayTracking[selectedNextAction]) {
+                PlayTracking[selectedNextAction]();
+            }
+        }
     })

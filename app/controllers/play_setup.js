@@ -21,7 +21,7 @@ angular.module('TnG')
         $scope.heading = "Choose Club Set";
         $scope.subHeading = "Available sets"
 
-        PlaySetup.getPanes(collection, function (availableClubSets) {
+        PlaySetup.getPageData(collection, function (availableClubSets) {
             $scope.panes = availableClubSets;
         });
 
@@ -40,7 +40,7 @@ angular.module('TnG')
         $scope.heading = "Choose Golf Course";
         $scope.subHeading = "Your Favorite Courses";
 
-        PlaySetup.getPanes(collection, function (retrievedCourse) {
+        PlaySetup.getPageData(collection, function (retrievedCourse) {
             $scope.panes = retrievedCourse;
         });
 
