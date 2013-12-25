@@ -1,37 +1,54 @@
 angular.module('TnG')
 
-.service('PlayTracking', function ($http, $location) {
-    this.trackedHoles = [];
-    this.trackedShots = {};
-    this.activeShot = {};
+.service('PlayTracking', function ($http, $location, $route, $routeParams) {
+        this.mulliganLog = [];
+        this.endpoint = "https://talkngolf.firebaseio.com/";
 
-    this.trackShot = function (holeNumber, shotNumber, clubUsed) {
-        var shotData = {
-            "holeNumber": holeNumber,
-            "shotNumber": shotNumber,
-            "clubUsed": clubUsed.code
+        this.fetch = function (collection, callback) {
+
+            $http({method: 'GET', url: this.endpoint + collection +'.json'})
+
+            .success(function(fetchedData) {
+                callback(fetchedData);
+            })
+
+            .error(function(error, status) {
+                callback(error, status);
+            });
         };
-        this.activeShot = shotData;
-    };
 
-    this.trackMood = function (moodSwing, shotData) {
-        shotData = shotData || this.activeShot;
-        shotData.moodSwing = moodSwing;
+        this.continue = function (nextStep) {
+            console.log('continue');
+            if(nextStep) {
+                $location.path(nextStep);
+            }
+        };
 
-        this.saveTrack(shotData);
-    };
+        this.mulligan = function () {
+            var dataToSave = {}, currentHole, currentShot, selectedClub, moodSwing, nextStep, params;
+            params = $routeParams;
 
-    this.saveTrack = function (shotData) {
-       if(shotData.shotNumber){
-           this.trackedShots[shotData.shotNumber] = shotData;
-       } else {
-           console.log('No shot number');
-           console.log(shotData);
-       }
-    };
+            this.mulliganLog.push(params);
 
-    this.continue = function (nextStep) {
-        $location.path(nextStep);
-    };
+            var doOverLocation = $location.path().split('/');
+            doOverLocation.pop(); //remove the moodSwing
+            doOverLocation.pop(); //remove the club selection
 
+            nextStep = doOverLocation.join('/');
+
+            this.continue(nextStep);
+            console.log('mulligan shot');
+        };
+
+        this.editTracking = function () {
+            console.log('edit hole');
+        };
+
+        this.nextHole = function () {
+            console.log('next hole');
+        };
+
+        this.nextShot = function () {
+            console.log('next shot');
+        };
 })
