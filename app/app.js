@@ -90,16 +90,21 @@ var app = angular.module('TnG', ['ngRoute'])
             },
             {
                 "listOrder": "2",
-                "label": "Edit",
-                "name": "editTracking"
+                "label": "Edit Hole",
+                "name": "editHole"
             },
             {
                 "listOrder": "3",
+                "label": "Edit Shot",
+                "name": "editShot"
+            },
+            {
+                "listOrder": "4",
                 "label": "Next Hole",
                 "name": "nextHole"
             },
             {
-                "listOrder": "4",
+                "listOrder": "5",
                 "label": "Continue",
                 "name": "nextShot"
             }
