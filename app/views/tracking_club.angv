@@ -4,5 +4,5 @@
 <div class="dynamic-content btn-group btn-group-vertical btn-group-lg">
     <a type="button" class="btn btn-default"
        data-ng-repeat="(paneTitle, paneLink) in panes"
-       data-ng-click="trackShot(paneLink)" data-ng-bind="paneTitle"></a>
+       data-ng-click="selectClub(paneLink)" data-ng-bind="paneTitle"></a>
 </div>

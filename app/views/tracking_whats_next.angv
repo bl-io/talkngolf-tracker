@@ -4,5 +4,5 @@
 <div class="dynamic-content btn-group btn-group-vertical btn-group-lg">
     <a type="button" class="btn btn-default"
        data-ng-repeat="nextAction in panes"
-       data-ng-click="continue(nextAction.name)" data-ng-bind="nextAction.label"></a>
+       data-ng-click="selectNext(nextAction.name)" data-ng-bind="nextAction.label"></a>
 </div>

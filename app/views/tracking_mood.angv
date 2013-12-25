@@ -2,5 +2,5 @@
 <h3 data-ng-bind="subHeading" class="sub-heading"></h3>
 
 <div data-ng-repeat="(moodSwing,moodClass) in panes"
-     class="{{moodClass}}" data-ng-click="trackMood(moodSwing)">
+     class="{{moodClass}}" data-ng-click="selectMood(moodSwing)">
 </div>
