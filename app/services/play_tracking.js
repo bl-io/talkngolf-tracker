@@ -57,7 +57,24 @@ angular.module('TnG')
         };
 
         this.nextHole = function () {
-            console.log('next hole');
+            var baseUrl,
+                currentHoleAsNumber,
+                nextHoleAsNumber,
+                nextStep,
+                params = $routeParams;
+
+            currentHoleAsNumber = parseInt(params.currentHole);
+
+            nextHoleAsNumber = currentHoleAsNumber + 1;
+
+            baseUrl = $location.path().split('/');
+            baseUrl.pop();
+            baseUrl.pop();
+            baseUrl.pop();
+            baseUrl.pop();
+
+            nextStep = baseUrl.join('/') + "/" + nextHoleAsNumber;
+            this.continue(nextStep);
         };
 
         this.nextShot = function () {
@@ -77,13 +94,13 @@ angular.module('TnG')
 
             dataToSave.time = Date();
 
-//            if(!this.shotLog[params.currentHole]) {
-//                this.shotLog[params.currentHole] = [];
-//            };
-
-            if(!this.shotLog["1"]) {
-                this.shotLog["1"] = [];
+            if(!this.shotLog[params.currentHole]) {
+                this.shotLog[params.currentHole] = [];
             };
+
+//            if(/*!this.shotLog["1"]) {
+//                this.shotLog["1"] = [];
+//            };*/
 
             this.shotLog[params.currentHole].push(dataToSave);
 
