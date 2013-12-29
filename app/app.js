@@ -1,35 +1,11 @@
 var app = angular.module('TnG', ['ngRoute'])
     .config(function ($routeProvider) {
-        $routeProvider
 
+        $routeProvider
             .when('/', {
                 controller:'Chooser',
                 templateUrl:'app/views/chooser.angv'
             })
-
-            .when('/mockup', {
-                templateUrl:'app/views/mockup.angv'
-            })
-
-            .when('/play/track/:currentHole', {
-                redirectTo: "/play/track/:currentHole/1"
-            })
-
-            .when('/play/track/:currentHole/:currentShot', {
-                controller:'TrackClub',
-                templateUrl:'app/views/tracking_club.angv'
-            })
-
-            .when('/play/track/:currentHole/:currentShot/:selectedClub', {
-                controller:'TrackMood',
-                templateUrl:'app/views/tracking_mood.angv'
-            })
-
-            .when('/play/track/:currentHole/:currentShot/:selectedClub/:moodSwing', {
-                controller:'TrackWhatsNext',
-                templateUrl:'app/views/tracking_whats_next.angv'
-            })
-
     })
 
     .controller('TrackClub', function ($scope, $http, $location, PlaySetup, PlayTracking, $routeParams) {
@@ -48,11 +24,6 @@ var app = angular.module('TnG', ['ngRoute'])
 
             PlayTracking.continue(nextStep);
         };
-
-//        PlayTracking.fetch('clubs', function (publicClubSets) {
-//            $scope.panes = publicClubSets;
-//            console.log(PlaySetup)
-//        })
     })
 
     .controller('TrackMood', function ($scope, PlayTracking, $location, $routeParams) {
@@ -75,40 +46,15 @@ var app = angular.module('TnG', ['ngRoute'])
             selectedMood = selectedMood;
             nextStep = baseUrl + selectedMood;
 
-            PlayTracking.continue(nextStep);
+            PlayTracking.saveShot().then(function () {
+                PlayTracking.continue(nextStep);
+            });
+
         };
     })
 
     .controller('TrackWhatsNext', function ($scope, PlayTracking, $routeParams) {
         $scope.heading = "What's Next?";
-
-        $scope.panes = [
-            {
-                "listOrder": "1",
-                "label": "Mulligan",
-                "name": "mulligan"
-            },
-            {
-                "listOrder": "2",
-                "label": "Edit Hole",
-                "name": "editHole"
-            },
-            {
-                "listOrder": "3",
-                "label": "Edit Shot",
-                "name": "editShot"
-            },
-            {
-                "listOrder": "4",
-                "label": "Next Hole",
-                "name": "nextHole"
-            },
-            {
-                "listOrder": "5",
-                "label": "Continue",
-                "name": "nextShot"
-            }
-        ];
 
         $scope.selectNext = function (selectedNextAction) {
             if(PlayTracking[selectedNextAction]) {
