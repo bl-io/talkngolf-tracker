@@ -16,20 +16,23 @@ angular.module('TnG')
     })
 
     .controller('Clubset', function ($scope, PlaySetup) {
-        var baseCollection = collection = 'clubs';
-        var nextStep = "/play/choose/course";
+        var baseCollection = collection = 'clubs',
+            nextStep = "/play/choose/course",
+            availableSets;
+
         $scope.heading = "Choose Club Set";
         $scope.subHeading = "Available sets"
 
+
         PlaySetup.getPageData(collection, function (availableClubSets) {
-            $scope.panes = availableClubSets;
+            $scope.panes = availableSets = availableClubSets;
         });
 
         $scope.continuePlaySetup = function (selectedClubSet) {
             PlaySetup.selectedClubSet = $scope.panes[selectedClubSet];
 
             collection = baseCollection + "/" + selectedClubSet;
-            PlaySetup.continuePlaySetup(nextStep);
+            PlaySetup.continuePlaySetup(nextStep, availableSets[selectedClubSet], 'clubs')
         };
     })
 
@@ -46,23 +49,27 @@ angular.module('TnG')
 
         $scope.continuePlaySetup = function (selectedCourse) {
             PlaySetup.selectedCourse = selectedCourse;
-            PlaySetup.continuePlaySetup(nextStep);
+            PlaySetup.continuePlaySetup(nextStep, selectedCourse, 'course');
         };
     })
 
     .controller('CourseStart', function ($scope, PlaySetup) {
-        var nextStep = "/play/track/";
+        var nextStep = "/play/track/",
+            startingHoles = {
+                "1": "1",
+                "10": "10"
+            };
 
         $scope.heading = "Choose";
         $scope.subHeading = "The Starting Hole";
 
-        $scope.panes = {
-            "1": "1",
-            "10": "10"
-        };
+        $scope.panes = startingHoles;
 
         $scope.continuePlaySetup = function (selectedStartingHole) {
             PlaySetup.selectedStartingHole = selectedStartingHole;
-            PlaySetup.continuePlaySetup(nextStep + selectedStartingHole);
+            PlaySetup.continuePlaySetup(
+                nextStep + selectedStartingHole,
+                startingHoles[selectedStartingHole],
+                'startingHole');
         };
     })

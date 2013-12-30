@@ -1,10 +1,29 @@
+'use strict'
+
+//@TODO: Replace with loggedInAs when Auth is integrated
+var username = "dwayneford";
+
 angular.module('TnG')
 
-.service('PlayTracking', function ($http, $location, $route, $routeParams) {
+.service('PlayTracking', function ($http, $location, $q, $route, $routeParams) {
         this.mulliganLog = [],
         this.shotLog = {};
         this.endpoint = "https://talkngolf.firebaseio.com/";
-        this.roundEndpoint = "https://tng-rounds.firebaseio.com";
+        this.roundEndpoint = "https://tng-rounds.firebaseio.com/" + username;
+
+        this._formatPathData = function () {
+            var params = $routeParams,
+                dataToSave = {};
+
+            for (var paramName in params) {
+                if (paramName == "selectedClub" || paramName == "moodSwing" || paramName == "currentHole") {
+                    dataToSave[paramName] = params[paramName];
+                }
+            }
+            dataToSave.time = Date();
+
+            return dataToSave;
+        };
 
         this.fetch = function (collection, callback) {
 
@@ -34,7 +53,7 @@ angular.module('TnG')
             var dataToSave = {}, currentHole, currentShot, selectedClub, moodSwing, nextStep, params;
             params = $routeParams;
 
-            for(paramName in params) {
+            for(var paramName in params) {
                 dataToSave[paramName] = params[paramName];
             }
 
@@ -80,27 +99,15 @@ angular.module('TnG')
         this.nextShot = function () {
             var params = $routeParams,
                 baseUrl,
-                dataToSave = {},
                 currentShotAsNumber,
                 newParams = [],
-                nextShotAsNumber;
-
-
-            for(paramName in params) {
-                if (paramName == "selectedClub" || paramName == "moodSwing" || paramName == "currentHole") {
-                    dataToSave[paramName] = params[paramName];
-                }
-            }
-
-            dataToSave.time = Date();
+                nextShotAsNumber,
+                nextStep,
+                dataToSave = this._formatPathData();
 
             if(!this.shotLog[params.currentHole]) {
                 this.shotLog[params.currentHole] = [];
             };
-
-//            if(/*!this.shotLog["1"]) {
-//                this.shotLog["1"] = [];
-//            };*/
 
             this.shotLog[params.currentHole].push(dataToSave);
 
@@ -118,7 +125,7 @@ angular.module('TnG')
             baseUrl.pop();
             baseUrl.pop();
 
-            for(paramName in params) {
+            for(var paramName in params) {
 
                 if(paramName == "currentHole" || paramName == "currentShot") {
                     newParams.push(params[paramName]);
@@ -127,5 +134,21 @@ angular.module('TnG')
             nextStep = baseUrl.join('/') + "/" + newParams.join('/');
 
             this.continue(nextStep);
+        };
+
+        this.saveShot = function (nextPieceOfData) {
+            var deferred = $q.defer(),
+                dataToSave = this._formatPathData(),
+                params = $routeParams;
+
+            if(!this.shotLog[params.currentHole]) {
+                this.shotLog[params.currentHole] = [];
+            };
+
+            this.shotLog[params.currentHole].push(dataToSave);
+
+            $http.put(this.roundEndpoint + "/.json", this.shotLog);
+
+            return deferred.promise;
         };
 })

@@ -16,7 +16,10 @@ var app = angular.module('TnG', ['ngRoute'])
 
         $scope.heading = "Track Club";
         $scope.subHeading = "Hole " + round.currentHole + " Shot "+ round.currentShot;
-        $scope.panes = PlaySetup.selectedClubSet;
+
+        PlaySetup.getPageData('clubs', function (data) {
+            $scope.panes = data;
+        }, 'rounds');
 
         $scope.selectClub = function (selectedClub) {
             selectedClub = selectedClub.code;
