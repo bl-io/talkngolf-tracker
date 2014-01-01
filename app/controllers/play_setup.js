@@ -1,7 +1,8 @@
 angular.module('TnG')
 
-    .controller('Chooser', function ($scope, PlaySetup, $firebase) {
+    .controller('Chooser', function ($scope, CurrentRound, PlaySetup) {
         var nextStep = "/play/choose/clubset";
+
         $scope.heading = "Choose";
         $scope.subHeading = "Starting hole";
         $scope.panes = {
@@ -9,55 +10,58 @@ angular.module('TnG')
             "Play": "play"
         };
 
-        $scope.continuePlaySetup = function (selectedMode) {
+        $scope.initializeTracking = function (selectedMode) {
+            CurrentRound.setCurrentRound($scope, selectedMode);
             PlaySetup.selectedMode = selectedMode;
             PlaySetup.continuePlaySetup(nextStep);
         };
     })
 
-    .controller('Clubset', function ($scope, $firebase, PlaySetup) {
+    .controller('Clubset', function ($scope, CurrentRound, $firebase, PlaySetup) {
+        CurrentRound.getCurrentRound($scope);
+
         var baseCollection = collection = 'clubs';
         var nextStep = "/play/choose/course"
-
-        $scope.heading = "Choose Club Set";
-        $scope.subHeading = "Available sets"
-
-        //@TODO: Service replacment - AngularFire
         var defaultClubsRefUrl = 'https://talkngolf.firebaseio.com/clubs';
         var defaultClubsRef = new Firebase(defaultClubsRefUrl);
 
+        $scope.heading = "Choose Club Set";
+        $scope.subHeading = "Available sets"
         $scope.panes = $firebase(defaultClubsRef);
-
 
         $scope.continuePlaySetup = function (selectedClubSet) {
             PlaySetup.selectedClubSet = $scope.panes[selectedClubSet];
 
+            CurrentRound.saveToRound($scope, 'clubs', $scope.panes[selectedClubSet]);
+
             collection = baseCollection + "/" + selectedClubSet;
-            PlaySetup.continuePlaySetup(nextStep, $scope.panes[selectedClubSet], 'clubs')
+            PlaySetup.continuePlaySetup(nextStep);
         };
     })
 
-    .controller('Course', function ($scope, $firebase, PlaySetup) {
+    .controller('Course', function ($scope, CurrentRound, $firebase, PlaySetup) {
+        CurrentRound.getCurrentRound($scope);
         var collection = "courses";
         var nextStep = "/play/choose/course/start";
-
-        $scope.heading = "Choose Golf Course";
-        $scope.subHeading = "Your Favorite Courses";
-
-        //@TODO: Service replacment - AngularFire
         var coursesRefUrl = 'https://tng-courses.firebaseio.com';
         var coursesRef = new Firebase(coursesRefUrl);
+
+        $scope.heading = "Choose Golf Course";
+
+        $scope.subHeading = "Your Favorite Courses";
 
         $scope.panes = $firebase(coursesRef);
 
 
         $scope.continuePlaySetup = function (selectedCourse) {
-            PlaySetup.selectedCourse = selectedCourse;
-            PlaySetup.continuePlaySetup(nextStep, selectedCourse, 'course');
+            CurrentRound.saveToRound($scope, 'course', selectedCourse);
+            PlaySetup.continuePlaySetup(nextStep);
         };
     })
 
-    .controller('CourseStart', function ($scope, PlaySetup) {
+    .controller('CourseStart', function ($scope, CurrentRound, $firebase, PlaySetup) {
+        CurrentRound.getCurrentRound($scope);
+
         var nextStep = "/play/track/",
             startingHoles = {
                 "1": "1",
@@ -66,14 +70,16 @@ angular.module('TnG')
 
         $scope.heading = "Choose";
         $scope.subHeading = "The Starting Hole";
-
         $scope.panes = startingHoles;
 
+
+        //Begin Tracking
         $scope.continuePlaySetup = function (selectedStartingHole) {
+
             PlaySetup.selectedStartingHole = selectedStartingHole;
-            PlaySetup.continuePlaySetup(
-                nextStep + selectedStartingHole,
-                startingHoles[selectedStartingHole],
-                'startingHole');
+
+            CurrentRound.saveToRound($scope, 'tracking', {"starting_hole": selectedStartingHole});
+
+            PlaySetup.continuePlaySetup(nextStep + selectedStartingHole);
         };
     })
