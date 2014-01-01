@@ -8,7 +8,7 @@ var app = angular.module('TnG', ['ngRoute', 'firebase'])
             })
     })
 
-    .controller('TrackClub', function ($scope, $http, $location, PlaySetup, PlayTracking, $routeParams) {
+    .controller('TrackClub', function ($scope, $firebase, $http, $location, PlaySetup, PlayTracking, $routeParams) {
         var baseUrl, nextStep, hole, shot, clubSet, round;
 
         round = $routeParams;
@@ -17,9 +17,6 @@ var app = angular.module('TnG', ['ngRoute', 'firebase'])
         $scope.heading = "Track Club";
         $scope.subHeading = "Hole " + round.currentHole + " Shot "+ round.currentShot;
 
-        PlaySetup.getPageData('clubs', function (data) {
-            $scope.panes = data;
-        }, 'rounds');
 
         $scope.selectClub = function (selectedClub) {
             selectedClub = selectedClub.code;
