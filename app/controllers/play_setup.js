@@ -1,6 +1,6 @@
 angular.module('TnG')
 
-    .controller('Chooser', function ($scope, PlaySetup) {
+    .controller('Chooser', function ($scope, PlaySetup, $firebase) {
         var nextStep = "/play/choose/clubset";
         $scope.heading = "Choose";
         $scope.subHeading = "Starting hole";
@@ -15,37 +15,41 @@ angular.module('TnG')
         };
     })
 
-    .controller('Clubset', function ($scope, PlaySetup) {
-        var baseCollection = collection = 'clubs',
-            nextStep = "/play/choose/course",
-            availableSets;
+    .controller('Clubset', function ($scope, $firebase, PlaySetup) {
+        var baseCollection = collection = 'clubs';
+        var nextStep = "/play/choose/course"
 
         $scope.heading = "Choose Club Set";
         $scope.subHeading = "Available sets"
 
+        //@TODO: Service replacment - AngularFire
+        var defaultClubsRefUrl = 'https://talkngolf.firebaseio.com/clubs';
+        var defaultClubsRef = new Firebase(defaultClubsRefUrl);
 
-        PlaySetup.getPageData(collection, function (availableClubSets) {
-            $scope.panes = availableSets = availableClubSets;
-        });
+        $scope.panes = $firebase(defaultClubsRef);
+
 
         $scope.continuePlaySetup = function (selectedClubSet) {
             PlaySetup.selectedClubSet = $scope.panes[selectedClubSet];
 
             collection = baseCollection + "/" + selectedClubSet;
-            PlaySetup.continuePlaySetup(nextStep, availableSets[selectedClubSet], 'clubs')
+            PlaySetup.continuePlaySetup(nextStep, $scope.panes[selectedClubSet], 'clubs')
         };
     })
 
-    .controller('Course', function ($scope, PlaySetup) {
+    .controller('Course', function ($scope, $firebase, PlaySetup) {
         var collection = "courses";
         var nextStep = "/play/choose/course/start";
 
         $scope.heading = "Choose Golf Course";
         $scope.subHeading = "Your Favorite Courses";
 
-        PlaySetup.getPageData(collection, function (retrievedCourse) {
-            $scope.panes = retrievedCourse;
-        });
+        //@TODO: Service replacment - AngularFire
+        var coursesRefUrl = 'https://tng-courses.firebaseio.com';
+        var coursesRef = new Firebase(coursesRefUrl);
+
+        $scope.panes = $firebase(coursesRef);
+
 
         $scope.continuePlaySetup = function (selectedCourse) {
             PlaySetup.selectedCourse = selectedCourse;

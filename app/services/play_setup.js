@@ -11,7 +11,7 @@ angular.module('TnG')
     var endpoint = "https://talkngolf.firebaseio.com/";
 
     this.getPageData = function (collection, callback, endpointOverride) {
-        
+
         var refList = {
             "rounds": "https://tng-rounds.firebaseio.com/",
             "default": "https://talkngolf.firebaseio.com/"

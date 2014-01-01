@@ -1,4 +1,4 @@
-var app = angular.module('TnG', ['ngRoute'])
+var app = angular.module('TnG', ['ngRoute', 'firebase'])
     .config(function ($routeProvider) {
 
         $routeProvider
