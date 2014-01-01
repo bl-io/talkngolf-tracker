@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('TnG')
 
     .controller('Chooser', function ($scope, CurrentRound, PlaySetup) {
@@ -20,7 +22,6 @@ angular.module('TnG')
     .controller('Clubset', function ($scope, CurrentRound, $firebase, PlaySetup) {
         CurrentRound.getCurrentRound($scope);
 
-        var baseCollection = collection = 'clubs';
         var nextStep = "/play/choose/course"
         var defaultClubsRefUrl = 'https://talkngolf.firebaseio.com/clubs';
         var defaultClubsRef = new Firebase(defaultClubsRefUrl);
@@ -34,7 +35,6 @@ angular.module('TnG')
 
             CurrentRound.saveToRound($scope, 'clubs', $scope.panes[selectedClubSet]);
 
-            collection = baseCollection + "/" + selectedClubSet;
             PlaySetup.continuePlaySetup(nextStep);
         };
     })
