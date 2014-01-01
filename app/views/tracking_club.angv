@@ -6,8 +6,3 @@
        data-ng-repeat="(paneTitle, paneLink) in currentRound.clubs"
        data-ng-click="selectClub(paneLink)" data-ng-bind="paneTitle"></a>
 </div>
-
-<div data-ng-repeat="round in currentRound">
-    {{ round.morganpressel }}
-</div>
-{{ currentRound.player }}

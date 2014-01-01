@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('TnG')
+angular.module('TnG')
 
 .service('CurrentRound', function (CurrentPlayer, $firebase, $location) {
     var currentPlayer = CurrentPlayer.getUsername();
