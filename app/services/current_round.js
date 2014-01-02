@@ -33,6 +33,30 @@ angular.module('TnG')
         parentScope.currentRound.$save(dataLabel);
     };
 
+    this.saveTracking = function (parentScope, dataLabel, dataContents) {
+        parentScope.currentRound['tracking'][dataLabel] = dataContents;
+        parentScope.currentRound.$save('tracking');
+    };
+
+    this.saveShot = function (parentScope, currentHole, currentShot, club, mood) {
+        if(currentHole && currentShot) {
+
+            if(!parentScope.currentRound.tracking[currentHole]) {
+                parentScope.currentRound.tracking[currentHole] = {};
+            }
+
+            parentScope.currentRound.tracking[currentHole][currentShot] = {};
+            parentScope.currentRound.tracking[currentHole][currentShot].club = club;
+
+            if(mood) {
+                parentScope.currentRound.tracking[currentHole][currentShot].mood = mood;
+            }
+
+            parentScope.currentRound.$save('tracking');
+
+        }
+    };
+
     this.endRound = function (parentScope) {
         var roundToSave, currentRoundData = {};
         var archiveRefUrl = 'https://tng-archives.firebaseio.com/'+currentPlayer;

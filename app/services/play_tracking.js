@@ -1,154 +1,37 @@
-'use strict'
-
-//@TODO: Replace with loggedInAs when Auth is integrated
-var username = "dwayneford";
+'use strict';
 
 angular.module('TnG')
 
-.service('PlayTracking', function ($http, $location, $q, $route, $routeParams) {
-        this.mulliganLog = [],
-        this.shotLog = {};
-        this.endpoint = "https://talkngolf.firebaseio.com/";
-        this.roundEndpoint = "https://tng-rounds.firebaseio.com/" + username;
+.service('PlayTracking', function ($location) {
+    var currentPath = $location.path().split('/');
 
-        this._formatPathData = function () {
-            var params = $routeParams,
-                dataToSave = {};
-
-            for (var paramName in params) {
-                if (paramName == "selectedClub" || paramName == "moodSwing" || paramName == "currentHole") {
-                    dataToSave[paramName] = params[paramName];
-                }
-            }
-            dataToSave.time = Date();
-
-            return dataToSave;
-        };
-
-        this.fetch = function (collection, callback) {
-
-            $http({method: 'GET', url: this.endpoint + collection +'.json'})
-
-            .success(function(fetchedData) {
-                callback(fetchedData);
-            })
-
-            .error(function(error, status) {
-                callback(error, status);
-            });
-        };
-
-        this.continue = function (nextStep) {
-            console.log('continue');
-            if(nextStep) {
-                $location.path(nextStep);
-            }
-        };
-
-        this.saveToMulliganLog = function (dataToSave) {
-            this.mulliganLog.push(dataToSave);
+    this.continue = function (nextStep) {
+        if(nextStep) {
+            $location.path(nextStep);
         }
+    };
 
-        this.mulligan = function () {
-            var dataToSave = {}, currentHole, currentShot, selectedClub, moodSwing, nextStep, params;
-            params = $routeParams;
+    this.nextShot = function (parentScope, currentHole, currentShot) {
+        var currentShotAsNumber = parseInt(currentShot);
+        var nextShot = (currentShotAsNumber + 1).toString();
 
-            for(var paramName in params) {
-                dataToSave[paramName] = params[paramName];
-            }
+        currentPath.splice(4);
+        currentPath.push(nextShot);
 
-            this.saveToMulliganLog(dataToSave);
+        var nextShotPath = currentPath.join('/');
 
-            console.log(this.mulliganLog);
+        $location.path(nextShotPath);
+    };
 
-            var doOverLocation = $location.path().split('/');
+    this.nextHole = function (parentScope, currentHole) {
+        var currentHoleAsNumber = parseInt(currentHole);
+        var nextHole = (currentHoleAsNumber + 1).toString();
 
-            doOverLocation.pop(); //remove the moodSwing
-            doOverLocation.pop(); //remove the club selection
+        currentPath.splice(3);
+        currentPath.push(nextHole);
 
-            nextStep = doOverLocation.join('/');
-            console.log('mulligan shot');
-            this.continue(nextStep);
-        };
+        var nextHolePath = currentPath.join('/');
 
-        this.editTracking = function () {
-            console.log('edit hole');
-        };
-
-        this.nextHole = function () {
-            var baseUrl,
-                currentHoleAsNumber,
-                nextHoleAsNumber,
-                nextStep,
-                params = $routeParams;
-
-            currentHoleAsNumber = parseInt(params.currentHole);
-
-            nextHoleAsNumber = currentHoleAsNumber + 1;
-
-            baseUrl = $location.path().split('/');
-            baseUrl.pop();
-            baseUrl.pop();
-            baseUrl.pop();
-            baseUrl.pop();
-
-            nextStep = baseUrl.join('/') + "/" + nextHoleAsNumber;
-            this.continue(nextStep);
-        };
-
-        this.nextShot = function () {
-            var params = $routeParams,
-                baseUrl,
-                currentShotAsNumber,
-                newParams = [],
-                nextShotAsNumber,
-                nextStep,
-                dataToSave = this._formatPathData();
-
-            if(!this.shotLog[params.currentHole]) {
-                this.shotLog[params.currentHole] = [];
-            };
-
-            this.shotLog[params.currentHole].push(dataToSave);
-
-            $http.put(this.roundEndpoint + "/.json", this.shotLog);
-
-            currentShotAsNumber = parseInt(params.currentShot);
-
-            nextShotAsNumber = currentShotAsNumber + 1;
-
-            params.currentShot = nextShotAsNumber.toString();
-
-            baseUrl = $location.path().split('/');
-            baseUrl.pop();
-            baseUrl.pop();
-            baseUrl.pop();
-            baseUrl.pop();
-
-            for(var paramName in params) {
-
-                if(paramName == "currentHole" || paramName == "currentShot") {
-                    newParams.push(params[paramName]);
-                }
-            }
-            nextStep = baseUrl.join('/') + "/" + newParams.join('/');
-
-            this.continue(nextStep);
-        };
-
-        this.saveShot = function (nextPieceOfData) {
-            var deferred = $q.defer(),
-                dataToSave = this._formatPathData(),
-                params = $routeParams;
-
-            if(!this.shotLog[params.currentHole]) {
-                this.shotLog[params.currentHole] = [];
-            };
-
-            this.shotLog[params.currentHole].push(dataToSave);
-
-            $http.put(this.roundEndpoint + "/.json", this.shotLog);
-
-            return deferred.promise;
-        };
-})
+        $location.path(nextHolePath);
+    };
+});

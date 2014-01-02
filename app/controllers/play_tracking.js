@@ -2,10 +2,12 @@
 
 angular.module('TnG')
 
-.controller('TrackClub', function ($scope, CurrentRound, $firebase, $http, $location, PlaySetup, PlayTracking, $routeParams) {
+.controller('TrackClub',
+    function ($scope, CurrentRound, $firebase, $http, $location, PlaySetup, PlayTracking, $routeParams) {
+
     CurrentRound.getCurrentRound($scope);
 
-    var baseUrl, nextStep, hole, shot, clubSet, round;
+    var baseUrl, currentHole, currentShot, nextStep, round;
 
     round = $routeParams;
     baseUrl = $location.path() + "/";
@@ -15,22 +17,29 @@ angular.module('TnG')
 
 
     $scope.selectClub = function (selectedClub) {
+
         selectedClub = selectedClub.code;
         nextStep = baseUrl + selectedClub;
 
+        currentHole = $routeParams.currentHole.toString();
+        currentShot = $routeParams.currentShot.toString();
+
+        CurrentRound.saveShot($scope, currentHole, currentShot, selectedClub);
         PlayTracking.continue(nextStep);
     };
 })
 
-.controller('TrackMood', function ($scope, PlayTracking, $location, $routeParams) {
-    var baseUrl, nextStep, round;
+.controller('TrackMood', function ($scope, CurrentRound, PlayTracking, $location, $routeParams) {
+
+    CurrentRound.getCurrentRound($scope);
+
+    var baseUrl, currentHole, currentShot, nextStep, round, selectedClub;
 
     baseUrl = $location.path() + "/";
     round = $routeParams;
 
-    $scope.heading = "How did that feel?";
-    $scope.subHeading = "Hole " + round.currentHole + " > Shot "+ round.currentShot + " > " + round.selectedClub;
-
+    $scope.heading = "Howasit?";
+    $scope.subHeading = "Hole " + round.currentHole + " | Shot "+ round.currentShot + " | " + round.selectedClub;
     $scope.panes = {
         "1": "face face1",
         "2": "face face2",
@@ -39,22 +48,29 @@ angular.module('TnG')
     };
 
     $scope.selectMood = function (selectedMood) {
+
         selectedMood = selectedMood;
         nextStep = baseUrl + selectedMood;
 
-        PlayTracking.saveShot().then(function () {
-            PlayTracking.continue(nextStep);
-        });
+        currentHole = $routeParams.currentHole;
+        currentShot = $routeParams.currentShot;
+        selectedClub = $routeParams.selectedClub;
 
+        CurrentRound.saveShot($scope, currentHole, currentShot, selectedClub, selectedMood);
+        PlayTracking.continue(nextStep);
     };
 })
 
-.controller('TrackWhatsNext', function ($scope, PlayTracking, $routeParams) {
-    $scope.heading = "What's Next?";
+.controller('TrackWhatsNext', function ($scope, CurrentRound, PlayTracking, $routeParams) {
 
-    $scope.selectNext = function (selectedNextAction) {
-        if(PlayTracking[selectedNextAction]) {
-            PlayTracking[selectedNextAction]();
-        }
-    }
+    CurrentRound.getCurrentRound($scope);
+
+    $scope.heading = "Watnow?";
+
+    var currentHole = $routeParams.currentHole;
+    var currentShot = $routeParams.currentShot;
+
+    $scope.selectNext = function (whatsNext) {
+        PlayTracking[whatsNext]($scope, currentHole, currentShot);
+    };
 })

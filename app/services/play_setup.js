@@ -67,8 +67,6 @@ angular.module('TnG')
 
         this._roundIsActive().then(
             function () {
-                //round already initialized
-                console.log('Already initialized');
                 defer.resolve();
             },
             function () {

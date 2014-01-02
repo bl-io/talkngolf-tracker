@@ -1,12 +1,6 @@
 <h2 data-ng-bind="heading" class="heading"></h2>
 <h3 data-ng-bind="subHeading" class="sub-heading"></h3>
 
-<!--<div class="dynamic-content btn-group btn-group-vertical btn-group-lg">-->
-    <!--<a type="button" class="btn btn-default"-->
-       <!--data-ng-repeat="nextAction in panes"-->
-       <!--data-ng-click="selectNext(nextAction.name)" data-ng-bind="nextAction.label"></a>-->
-<!--</div>-->
-
         <div class="btn-group btn-group-vertical btn-group-lg dynamic-content">
             <a type="button" class="btn btn-default" data-ng-click="selectNext('mulligan')">Mulligan</a>
         </div>
