@@ -1,6 +1,9 @@
 angular.module('TnG', ['ngRoute', 'firebase'])
 .run(function ($rootScope, $location) {
-
+	$rootScope.$on('$routeChangeError', function () {
+		console.log('booooooo!!!');
+		$location.path('/');
+	});
 })
 .config(function ($routeProvider) {
 
@@ -19,7 +22,17 @@ angular.module('TnG', ['ngRoute', 'firebase'])
 				          } else if (user) {
 					          // user authenticated with Firebase
 					          console.log('User ID: ' + user.id + ', Provider: ' + user.provider);
-										$rootScope.loggedInAs = user.username;
+					          console.log('USER', user);
+
+					          var username;
+					          if(user.username) {
+						          username = user.username.replace(".", "_dot_");
+					          } else {
+						          username = user.email.replace(".", "_dot_");
+					          }
+
+					          $rootScope.loggedInAs = username;
+
 					          $window.location = "#/play"
 
 				          } else {
@@ -34,10 +47,24 @@ angular.module('TnG', ['ngRoute', 'firebase'])
         })
         .when('/play', {
             controller:'Chooser',
-            templateUrl:'app/views/chooser.angv'
+            templateUrl:'app/views/chooser.angv',
+	          resolve: {
+		          dependencies: function ($rootScope, $q) {
+			          var deferred = $q.defer();
+			          var username = $rootScope.loggedInAs;
+
+			          if(username) {
+				          deferred.resolve(username);
+			          } else {
+				          deferred.reject();
+			          }
+
+			          return deferred.promise;
+		          }
+	          }
         })
         .when('/register', {
-            controller:'Users',
+            controller:'UsersLogin',
             templateUrl:'app/views/users_register.angv'
         })
         .when('/login', {
