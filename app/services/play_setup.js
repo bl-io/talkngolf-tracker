@@ -4,7 +4,6 @@ angular.module('TnG')
 
 .service('PlaySetup', function ($http, $location, $q, $rootScope) {
     //@TODO: Replace with loggedInAs when Auth is integrated
-    this.loggedInAs = $rootScope.loggedInAs;
     this.roundEndpoint = "https://tng-rounds.firebaseio.com/";
     this.username = $rootScope.loggedInAs;
 
@@ -21,7 +20,7 @@ angular.module('TnG')
 
         endpoint = refList[endpointOverride] || endpoint;
 
-        targetCollection = this.loggedInAs + "/" + collection
+        targetCollection = $rootScope.loggedInAs + "/" + collection
 
 
         $http({method: 'GET', url: endpoint + targetCollection + '/.json'})
@@ -47,7 +46,7 @@ angular.module('TnG')
             endpoint = this.roundEndpoint,
             isActive = false,
             fb = new Firebase(endpoint),
-            username = username || this.loggedInAs;
+            username = username || $rootScope.loggedInAs;
         this.username = username;
 
         fb.child(username).on('value', function (snapshot) {

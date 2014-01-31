@@ -10,7 +10,7 @@ angular.module('TnG')
 	var db = new Firebase(authRefUrl);
 	var $service = this;
 
-	this.quickStart = function () {
+	this.quickStart = function (parentScope) {
 		var newUser = parentScope.quickRegister;
 
 		var username = newUser.username;
@@ -21,25 +21,25 @@ angular.module('TnG')
 		}
 	};
 
-	this.checkAuth = function (){
-		console.log('checking auth');
-		var auth = new FirebaseSimpleLogin(db, function(error, user) {
-
-			if(error){
-				console.log(error);
-
-			}else if(user){
-				$rootScope.loggedInAs = user.username;
-
-				console.log($rootScope.loggedInAs);
-				//@TODO: Risk for auto-reload failure -- add a limiter of some sort
-				$location.path('/play/choose/clubset  ');
-				console.log($location.path());
-
-			}
-
-		});
-	};
+//	this.checkAuth = function (){
+//		console.log('checking auth');
+//		var auth = new FirebaseSimpleLogin(db, function(error, user) {
+//
+//			if(error){
+//				console.log(error);
+//
+//			}else if(user){
+//				var username = user.username.replace(".", "_dot_");
+//				$rootScope.loggedInAs = username;
+//
+//				//@TODO: Risk for auto-reload failure -- add a limiter of some sort
+//				$location.path('/play/choose/clubset  ');
+//				console.log($location.path());
+//
+//			}
+//
+//		});
+//	};
 
 	this.getUsername = function () {
 		var waiter = $q.defer();
@@ -72,6 +72,35 @@ angular.module('TnG')
 		});
 
 		return defer.promise;
+	};
+
+	this.authPassword = function (emailEnteredByUser, passwordEnteredByUser) {
+		if(emailEnteredByUser && passwordEnteredByUser) {
+			var auth = new FirebaseSimpleLogin(db, function (error, user) {
+				if(error){
+					console.log(error);
+
+				}else if(user){
+					console.log('Logged in as: ', user.username);
+					$window.location = "#/";
+
+				}else{
+					console.log("Email: ", emailEnteredByUser);
+					console.log("Pass: ", passwordEnteredByUser);
+					this.login('password', {
+						email: emailEnteredByUser,
+						password: passwordEnteredByUser
+					});
+					this.createUser(emailEnteredByUser, passwordEnteredByUser, function(error, user) {
+						if (!error) {
+							console.log('User Id: ' + user.id + ', Email: ' + user.email);
+						}
+					});
+				};
+			});
+
+
+		}
 	};
 
 	this.authTwitter = function () {
