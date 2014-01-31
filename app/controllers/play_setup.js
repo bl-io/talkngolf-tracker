@@ -4,7 +4,6 @@ angular.module('TnG')
 
 .controller('Chooser', function ($scope, CurrentRound, FirebaseAuth, PlaySetup, $rootScope) {
     var nextStep = "/play/choose/clubset";
-
     $scope.heading = "Choose";
     $scope.subHeading = "Starting hole";
     $scope.panes = {
