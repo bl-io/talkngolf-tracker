@@ -4,6 +4,8 @@ angular.module('TnG')
 
 .controller('UsersLogin', function ($scope, $location, $q, $rootScope, $window, $firebase, FirebaseAuth) {
 	var quickRegister = {};
+	window.localStorage.setItem("phoneId", "0000000000444444444333333");
+
 
 	$scope.quickRegister = quickRegister;
 
