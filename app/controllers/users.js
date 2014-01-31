@@ -9,7 +9,19 @@ angular.module('TnG')
 	$scope.loginWithTwitter = FirebaseAuth.authTwitter;
 	$scope.loginWithFacebook = FirebaseAuth.authFacebook;
 	$scope.quickRegister = quickRegister;
-	$scope.quickStart = FirebaseAuth.quickStart;
+	$scope.loginWithPassword = function () {
+		var email = $scope.quickRegister.username;
+		var password = $scope.quickRegister.password;
+
+		if(email && password) {
+			FirebaseAuth.authPassword(email, password);
+		}
+
+	}
+
+	$scope.quickStart = function () {
+		FirebaseAuth.quickStart($scope);
+	};
 
 })
 
