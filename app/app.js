@@ -19,7 +19,7 @@ angular.module('TnG', ['ngRoute', 'firebase'])
 				          } else if (user) {
 					          // user authenticated with Firebase
 					          console.log('User ID: ' + user.id + ', Provider: ' + user.provider);
-										$rootScope.loggedInAs = user.id;
+										$rootScope.loggedInAs = user.username;
 					          $window.location = "#/play"
 
 				          } else {
@@ -48,11 +48,12 @@ angular.module('TnG', ['ngRoute', 'firebase'])
             controller:'UsersLogout',
             templateUrl:'app/views/users_logout.angv',
 				    resolve: {
-					    dependencies: function ($q, $rootScope) {
+					    dependencies: function ($q, $rootScope, $window) {
 						    var userRef = new Firebase('https://talkngolf.firebaseio.com');
 						    var auth = new FirebaseSimpleLogin(userRef, function () {});
 						    auth.logout();
-
+								$rootScope.loggedInAs = "";
+						    $window.location = "#/";
 					    }
 				    }
         })
