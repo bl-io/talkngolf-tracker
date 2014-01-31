@@ -2,26 +2,32 @@
 
 angular.module('TnG')
 
-.service('CurrentRound', function (CurrentPlayer, $firebase, $location) {
-    var currentPlayer = CurrentPlayer.getUsername();
+.service('CurrentRound', function (FirebaseAuth, $firebase, $location, $q, $rootScope) {
+    var currentPlayer = $rootScope.loggedInAs;
+		this.loggedInAs = $rootScope.loggedInAs;
+
     var roundsEndpoint = 'https://tng-rounds.firebaseio.com/';
     var roundsRef = new Firebase(roundsEndpoint);
 
-    var currentRoundRefUrl = roundsEndpoint + currentPlayer;
+    var currentRoundRefUrl = roundsEndpoint + this.loggedInAs;
     var currentRoundRef = new Firebase(currentRoundRefUrl);
     var currentRound = $firebase(currentRoundRef);
 
-    this.setCurrentRound = function (parentScope, selectedModeToTrack) {
-        parentScope.currentRound = $firebase(roundsRef);
-        parentScope.currentRound[currentPlayer] = {
-            "mode": selectedModeToTrack,
-            "player": currentPlayer,
-            "start_time": new Date().getTime(),
-            "tracking": {
-                "details": "here"
-            }
-        };
-        parentScope.currentRound.$save(currentPlayer);
+    this.setCurrentRound = function (parentScope, selectedModeToTrack, currentPlayer) {
+
+			parentScope.currentRound = $firebase(roundsRef);
+
+			parentScope.currentRound[this.loggedInAs] = {
+				"mode": selectedModeToTrack,
+				"player": this.loggedInAs,
+				"start_time": new Date().getTime(),
+				"tracking": {
+					"details": "here"
+				}
+			};
+
+		  parentScope.currentRound.$save(this.loggedInAs);
+
     };
 
     this.getCurrentRound = function (parentScope) {
@@ -59,7 +65,7 @@ angular.module('TnG')
 
     this.endRound = function (parentScope) {
         var roundToSave, currentRoundData = {};
-        var archiveRefUrl = 'https://tng-archives.firebaseio.com/'+currentPlayer;
+        var archiveRefUrl = 'https://tng-archives.firebaseio.com/'+this.loggedInAs;
         var archiveRef = new Firebase(archiveRefUrl);
 
         roundToSave = $firebase(archiveRef);

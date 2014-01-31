@@ -2,7 +2,7 @@
 
 angular.module('TnG')
 
-.controller('Chooser', function ($scope, CurrentRound, PlaySetup) {
+.controller('Chooser', function ($scope, CurrentRound, FirebaseAuth, PlaySetup, $rootScope) {
     var nextStep = "/play/choose/clubset";
 
     $scope.heading = "Choose";
@@ -13,9 +13,9 @@ angular.module('TnG')
     };
 
     $scope.initializeTracking = function (selectedMode) {
-        CurrentRound.setCurrentRound($scope, selectedMode);
-        PlaySetup.selectedMode = selectedMode;
-        PlaySetup.continuePlaySetup(nextStep);
+	    CurrentRound.setCurrentRound($scope, selectedMode, $rootScope.loggedInAs);
+	    PlaySetup.selectedMode = selectedMode;
+	    PlaySetup.continuePlaySetup(nextStep);
     };
 })
 

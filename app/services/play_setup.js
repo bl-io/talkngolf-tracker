@@ -2,11 +2,11 @@
 
 angular.module('TnG')
 
-.service('PlaySetup', function ($http, $location, $q) {
+.service('PlaySetup', function ($http, $location, $q, $rootScope) {
     //@TODO: Replace with loggedInAs when Auth is integrated
-    this.loggedInAs = "dwayneforda";
+    this.loggedInAs = $rootScope.loggedInAs;
     this.roundEndpoint = "https://tng-rounds.firebaseio.com/";
-    this.username;
+    this.username = $rootScope.loggedInAs;
 
     var endpoint = "https://talkngolf.firebaseio.com/";
 

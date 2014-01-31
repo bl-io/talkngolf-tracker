@@ -8,6 +8,7 @@
     <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
     <link href="css/moodswings.css" rel="stylesheet">
     <link href="css/index.css" rel="stylesheet">
+    <link href="css/mockup.css" rel="stylesheet">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
@@ -20,21 +21,61 @@
     <![endif]-->
 
 </head>
-<body data-ng-app="TnG">
-<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <span class="navbar-brand logo">TalknGolf</span>
-        </div>
-        <div class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="#/">Play</a></li>
-                <li><a href="#/">Setup</a></li>
-            </ul>
-        </div><!--/.nav-collapse -->
-    </div>
-</div>
-<div class="mView" data-ng-view="">...</div>
-<script type="text/javascript" src="lib/app-loader.js"></script>
+<body data-ng-app="TnG" class="ng-cloak">
+
+
+	<div id="title" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div id="title-logo">&nbsp;</div>
+		<div class="nav-text" id="title-name">TalknGolf</div>
+		<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
+		<div class="collapse navbar-collapse navbar-right">
+			<ul class="nav navbar-nav">
+				<li class="dropdown" data-ng-controller="UsersLogin" data-ng-show="loggedInAs">
+					<a data-ng-href="" class="dropdown-toggle" data-toggle="dropdown">{{ loggedInAs }}
+						<b class="caret"></b>
+					</a>
+					<ul class="dropdown-menu">
+						<li><a href="#">Account Settings</a></li>
+						<li><a href="#">Play Settings</a></li>
+						<li><a href="#">Golf Metrics</a></li>
+						<li class="divider"></li>
+						<li><a data-ng-href="#/logout">Logout</a></li>
+					</ul>
+				</li>
+			</ul>
+		</div><!--/.nav-collapse -->
+	</div>
+
+
+
+
+<!--<div id="title" class="navbar navbar-inverse navbar-fixed-top" role="navigation">-->
+    <!--<div class="container">-->
+        <!--<div class="navbar-header">-->
+            <!--<span class="navbar-brand logo">TalknGolf</span>-->
+        <!--</div>-->
+        <!--<div class="collapse navbar-collapse">-->
+	        <!--<ul class="nav navbar-nav navbar-right">-->
+		        <!--<li class="dropdown" data-ng-controller="Users">-->
+			        <!--<a data-ng-href="" class="dropdown-toggle" data-toggle="dropdown">Current User <b class="caret"></b></a>-->
+			        <!--<ul class="dropdown-menu">-->
+				        <!--<li><a href="#">Account Settings</a></li>-->
+				        <!--<li><a href="#">Play Settings</a></li>-->
+				        <!--<li><a href="#">Golf Metrics</a></li>-->
+				        <!--<li class="divider"></li>-->
+				        <!--<li><a href="#">Logout</a></li>-->
+			        <!--</ul>-->
+		        <!--</li>-->
+	        <!--</ul>-->
+        <!--</div>&lt;!&ndash;/.nav-collapse &ndash;&gt;-->
+    <!--</div>-->
+<!--</div>-->
+	<div class="mView" data-ng-view="">...</div>
+	<script type="text/javascript" src="lib/app-loader.js"></script>
 </body>
 </html>
