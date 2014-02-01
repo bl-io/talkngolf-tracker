@@ -2,11 +2,11 @@
 
 <!-- config.xml reference: https://build.phonegap.com/docs/config-xml -->
 <widget xmlns     = "http://www.w3.org/ns/widgets"
-        xmlns:gap = "http://phonegap.com/ns/1.0"
+        xmlns:gap = "http://phonegap.com/ns/3.1"
         id        = "com.kshunz.golf"
-        version   = "1.0.0">
+        version   = "3.1.0">
 
-    <name>Mood Swings</name>
+    <name>MoodSwings Tracker</name>
 
     <description>FREE Tracker for TalknGolf.  Tracker for your shots, clubs, moods, and scores.</description>
 
